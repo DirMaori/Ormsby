@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="color-scheme" content="dark"><meta name="robots" content="noindex,nofollow">
+<title>Ormsby invites · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--sf:#0f0f10;--ln:#2a2a2d;--ink:#fff;--mut:#9b9ba3;--pk:#ff2e93;--vi:#8b2bff;--gd:#d9b45a;--pv:linear-gradient(135deg,#ff2e93,#8b2bff);color-scheme:dark;padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,sans-serif}
+h1,h2,h3,h4{font-family:Poppins,Inter,sans-serif;margin:0;letter-spacing:-.02em}.wrap{max-width:1240px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-left)) 80px}.hide{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit;border-radius:12px}button{cursor:pointer}
+input,select,textarea{background:#000;border:1px solid var(--ln);padding:10px 12px;min-height:42px;width:100%;font-size:16px}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pk)}
+label{display:block;font-weight:600;font-size:13px;margin:12px 0 5px;color:#d6d6dd}.sub,.hint{color:var(--mut);font-size:13px;margin:6px 0}
+.card,.panel{background:var(--sf);border:1px solid var(--ln);border-radius:22px;padding:16px 18px;margin-top:14px}.panel h3{font-size:18px;margin-bottom:6px}
+.btn{border:0;background:var(--pv);color:#fff;font-weight:700;padding:12px 20px;min-height:44px;border-radius:14px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}.bar button{background:var(--sf);border:1px solid var(--ln);padding:8px 14px;font-weight:600;font-size:13px;color:var(--mut);border-radius:99px;min-height:38px}.bar button.on{background:var(--pv);border-color:transparent;color:#fff}.bar input{flex:1;min-width:150px;border-radius:99px}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.top h1{font-size:24px;margin-right:auto}.top button{background:var(--sf);border:1px solid var(--ln);padding:8px 14px;border-radius:99px;font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.stat{background:var(--sf);border:1px solid var(--ln);border-radius:18px;padding:14px}.stat b{display:block;font:800 30px Poppins,sans-serif;color:var(--pk)}.stat:nth-child(even) b{color:#b27bff}.stat span{color:var(--mut);font-size:12px}
+.tr{display:grid;grid-template-columns:2fr .9fr .5fr .5fr 2fr auto;gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--ln)}.tr:first-of-type{border-top:0}.tr small{display:block;color:var(--mut);font-size:12px}.tr.new{box-shadow:inset 3px 0 var(--pk);padding-left:10px}
+.gr{display:grid;grid-template-columns:2fr 1.2fr 1.1fr .8fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--ln)}.gr:first-of-type{border-top:0}.gr code{font:600 14px ui-monospace,Menlo,monospace;color:#ff6bb5;letter-spacing:.06em}
+.pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;display:inline-block}.y{background:var(--pv)}.m{background:var(--vi)}.n{background:#333;color:#ccc}
+.cb{font-size:11px;padding:1px 8px;border-radius:99px;margin-left:6px;background:var(--vi);font-weight:600}.cb.h{background:var(--pk);color:#000}.cb.f{background:var(--gd);color:#000}
+.x{background:none;border:0;color:var(--mut);font-size:18px;padding:6px 8px;min-width:36px}
+.tr select,.gr select{padding:6px 8px;min-height:36px}
+nav{display:flex;gap:6px;margin-top:14px;border-bottom:1px solid var(--ln);overflow-x:auto}nav button{background:none;border:0;border-bottom:3px solid transparent;border-radius:0;padding:12px 14px;font-weight:600;color:var(--mut);white-space:nowrap}nav button.on{color:#fff;border-color:var(--pk)}
+.split{display:grid;grid-template-columns:1fr 430px;gap:18px;align-items:start}.pvwrap{position:sticky;top:10px}#fr{width:100%;height:780px;border:1px solid var(--ln);border-radius:28px;background:#000;margin-top:6px}
+details{background:var(--sf);border:1px solid var(--ln);border-radius:18px;padding:4px 16px 12px;margin-bottom:10px}summary{cursor:pointer;font:700 16px Poppins,sans-serif;padding:12px 0;list-style:none}summary:after{content:"▾";float:right;color:var(--mut)}
+.li{display:flex;gap:6px;align-items:center;margin-bottom:6px}.li input{min-width:0}.ops{display:flex}.ops button,.add{background:#000;border:1px solid var(--ln);padding:6px 9px;min-height:36px;color:var(--mut)}.add{margin-top:4px;color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:2fr 2fr 1fr;gap:10px}
+.savebar{position:sticky;bottom:0;z-index:5;display:flex;gap:8px;align-items:center;justify-content:flex-end;padding:12px 0;margin-top:10px;background:linear-gradient(transparent,#000 35%)}#dirty{margin-right:auto;color:var(--pk);font-weight:600;font-size:13px}.savebar button:not(.btn){background:var(--sf);border:1px solid var(--ln);padding:10px 16px;font-weight:600}
+.err{color:#ff6b9d;font-size:13px;margin-top:8px}.tok{background:#000;border:1px dashed var(--ln);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--mut);margin:6px 0 4px}.tok b{color:#ff6bb5;font-weight:600}
+#toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translate(-50%,-150px);background:var(--pv);font-weight:700;padding:12px 20px;border-radius:16px;z-index:9;transition:transform .35s;max-width:92vw;text-align:center}#toast.show{transform:translate(-50%,0)}
+@media(max-width:980px){.split{grid-template-columns:1fr}.pvwrap{position:static}#fr{height:720px}.stats{grid-template-columns:repeat(2,1fr)}.tr{grid-template-columns:1fr auto}.tr>:nth-child(3),.tr>:nth-child(4){display:none}.gr{grid-template-columns:1fr 1fr}.row3{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div id="login" class="card" style="max-width:420px;margin:12vh auto 0"><h2>Ormsby invites · Admin</h2><p class="sub">Hosts only.</p>
+ <label for="em">Email</label><input id="em" autocomplete="username"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password">
+ <div class="err hide" id="le"></div><button class="btn" id="li" style="margin-top:16px;width:100%">Sign in</button></div>
+<div id="app" class="hide">
+ <div class="top"><h1>Ormsby invites · <span style="color:var(--pk)">Admin</span></h1><button id="so">Sign out</button></div>
+ <nav id="tabs"></nav>
+
+ <section id="t-over">
+  <div class="bar" id="lists"></div><div class="stats" id="stats"></div><p class="sub" id="split"></p>
+  <div class="bar" id="st"></div><div class="bar"><input id="q" placeholder="Search parent, child, dietary, notes…"><button id="csv">Export replies</button></div>
+  <div class="panel" id="rows"></div><div class="panel" id="diet"></div><div class="panel" id="await"></div>
+  <div class="panel"><h3>Add a reply by hand</h3><p class="sub">For someone who texted you. It's added to the list selected above (or the first list).</p>
+   <div class="row3"><input id="mp" placeholder="Parent / family name"><input id="mk" placeholder="Child name"><div class="row2"><input id="ma" placeholder="Adults" inputmode="numeric"><input id="mkk" placeholder="Kids" inputmode="numeric"></div></div><button class="btn" id="mad" style="margin-top:10px">Add reply</button></div>
+ </section>
+
+ <section id="t-guests" class="hide">
+  <div class="panel"><h3>Add invites</h3><p class="sub">One family or guest per line. Each gets a unique code to print on their invitation.</p>
+   <textarea id="gl" rows="4" placeholder="The Smith whānau&#10;Nan &amp; Pop Ormsby"></textarea><div class="bar" id="gseg"></div><button class="btn" id="gadd">Generate codes</button></div>
+  <div class="bar"><input id="gq" placeholder="Search guests or codes…"><button id="gcsv">Export codes for printing</button></div>
+  <div class="panel" id="glist"></div>
+ </section>
+
+ <section id="t-edit" class="hide">
+  <p class="sub">Edit the words below and watch the invitation change on the right. Nothing goes live until you press <b>Publish changes</b>. Changing a family name in Guests &amp; codes updates the invitation straight away.</p>
+  <div class="split"><div id="ed"></div>
+   <div class="pvwrap"><div class="bar" id="pvt" style="margin-top:0"></div><div class="row2"><input id="pl" value="The Rewi whānau" aria-label="Sample family name"><button class="btn" id="pplay">▶ Replay intro</button></div><iframe id="fr" src="index.html?preview=1" title="Invitation preview"></iframe></div></div>
+  <div class="savebar"><span id="dirty"></span><button id="ics">Download party.ics</button><button id="reset">Reset to starting copy</button><button class="btn" id="save">Publish changes</button></div>
+ </section>
+</div></div><div id="toast"></div>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const CFG=window.ORMSBY||{},PARTY=CFG.PARTY||"party",ok=CFG.SUPABASE_URL&&!CFG.SUPABASE_URL.startsWith("YOUR_")&&typeof supabase!=="undefined";
+const sb=ok?supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_ANON_KEY):null;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const copy=o=>JSON.parse(JSON.stringify(o));
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),4500)}
+let CT=copy(CFG.DEFAULT||{}),rows=[],guests=[],lf="all",sf="all",gc="family",pc="family",seen=new Set(),first=true,chan=null,dirty=false;
+const types=()=>[...CT.children.map((c,i)=>({id:c.id,name:c.short,cls:i?"":"h"})),{id:"family",name:"Whānau",cls:"f"}];
+const tn=id=>(types().find(t=>t.id===id)||{name:id}).name,tc=id=>(types().find(t=>t.id===id)||{cls:""}).cls;
+const AL="ABCDEFGHJKMNPQRSTUVWXYZ23456789",gen=()=>Array.from(crypto.getRandomValues(new Uint8Array(8)),b=>AL[b%AL.length]).join(""),fmt=c=>c.replace(/(.{4})(.{4})/,"$1-$2");
+const base=location.origin+location.pathname.replace(/[^/]*$/,""),link=c=>base+"?code="+c;
+const tab=(el,o,g,set)=>{el.innerHTML=o.map(x=>`<button data-k="${x[0]}" class="${g()===x[0]?"on":""}">${x[1]}</button>`).join("");el.querySelectorAll("button").forEach(b=>b.onclick=()=>{set(b.dataset.k);tab(el,o,g,set);redraw()})};
+const redraw=()=>{drawOver();drawGuests()};
+
+/* ---------- sign in ---------- */
+$("#li").onclick=async()=>{if(!sb){$("#le").textContent="Add your Supabase URL and key in config.js first.";$("#le").classList.remove("hide");return}
+ const {error}=await sb.auth.signInWithPassword({email:$("#em").value.trim(),password:$("#pw").value});
+ if(error){$("#le").textContent="That email or password isn't right.";$("#le").classList.remove("hide")}else start()};
+$("#pw").onkeydown=e=>{if(e.key==="Enter")$("#li").click()};
+$("#so").onclick=async()=>{await sb.auth.signOut();location.reload()};
+async function start(){$("#login").classList.add("hide");$("#app").classList.remove("hide");
+ const {data}=await sb.from("party_content").select("content").eq("party",PARTY).maybeSingle();
+ CT=copy({...CFG.DEFAULT,...(data&&data.content||{})});
+ tab($("#tabs"),[["over","Overview"],["guests","Guests & codes"],["edit","Invitations"]],()=>curTab,k=>{curTab=k;["over","guests","edit"].forEach(t=>$("#t-"+t).classList.toggle("hide",t!==k))});
+ await load();renderEd();drawPv();
+ if(!chan)chan=sb.channel("rsvps").on("postgres_changes",{event:"*",schema:"public",table:"rsvps",filter:"party=eq."+PARTY},p=>{const r=p.new;
+  if(r&&r.source!=="manual"){const t=`${r.parent_name} (${tn(r.child)}): ${r.status==="yes"?"coming":r.status==="maybe"?"maybe":"can't come"}`;toast((p.eventType==="UPDATE"?"Updated RSVP: ":"New RSVP: ")+t);
+   try{if(Notification.permission==="granted")new Notification("RSVP",{body:t})}catch(e){}if(navigator.vibrate)navigator.vibrate(120)}load()}).subscribe();
+ try{if("Notification" in window&&Notification.permission==="default")Notification.requestPermission()}catch(e){}}
+let curTab="over";
+
+/* ---------- data ---------- */
+async function load(){const [a,b]=await Promise.all([sb.from("rsvps").select("*").eq("party",PARTY),sb.from("guests").select("*").eq("party",PARTY).order("created_at")]);
+ if(a.error||b.error)return toast("Couldn't load data");rows=a.data.sort((x,y)=>new Date(y.updated_at)-new Date(x.updated_at));guests=b.data;redraw();first=false}
+
+/* ---------- overview ---------- */
+function drawOver(){if(!$("#app")||$("#app").classList.contains("hide"))return;
+ const L=rows.filter(r=>lf==="all"||r.child===lf),yes=L.filter(r=>r.status==="yes"),sum=(a,k)=>a.reduce((s,r)=>s+r[k],0),s=$("#q").value.toLowerCase();
+ const wait=guests.filter(g=>(lf==="all"||g.child===lf)&&!rows.some(r=>r.guest_id===g.id));
+ $("#stats").innerHTML=[[sum(yes,"adults")+sum(yes,"kids"),"people coming"],[sum(yes,"kids"),"kids"],[sum(yes,"adults"),"adults"],[yes.length,"households yes"],[L.filter(r=>r.status==="maybe").length+" / "+L.filter(r=>r.status==="no").length,"maybe / can't"],[wait.length,"awaiting reply"]].map(x=>`<div class="stat"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
+ const gp=yes.filter(r=>r.child!=="family"),fp=yes.filter(r=>r.child==="family"),pp=a=>sum(a,"adults")+sum(a,"kids");
+ $("#split").textContent=`Each household is counted once. Official guests: ${pp(gp)} people · Whānau: ${pp(fp)} people.`;
+ tab($("#lists"),[["all","Everyone"],...types().map(t=>[t.id,t.id==="family"?"Whānau":t.name+"'s list"])],()=>lf,k=>lf=k);
+ tab($("#st"),[["all","All"],["yes","Yes"],["maybe","Maybe"],["no","Can't"]],()=>sf,k=>sf=k);
+ const V=L.filter(r=>(sf==="all"||r.status===sf)&&(!s||[r.parent_name,r.child_name,r.diet,r.note,r.phone].join(" ").toLowerCase().includes(s)));
+ $("#rows").innerHTML=V.length?V.map(r=>{const isNew=!first&&!seen.has(r.id+r.updated_at);
+  return `<div class="tr ${isNew?"new":""}"><div><b>${esc(r.parent_name)}</b><span class="cb ${tc(r.child)}">${esc(tn(r.child))}</span><small>${r.child==="family"?"Tamariki":"Child"}: ${esc(r.child_name)}${r.phone?" · "+esc(r.phone):""}</small><small>${new Date(r.updated_at).toLocaleString([], {day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})}</small></div>
+  <div><select data-ss="${r.id}" aria-label="Status">${["yes","maybe","no"].map(v=>`<option value="${v}" ${v===r.status?"selected":""}>${v==="no"?"Can't":v[0].toUpperCase()+v.slice(1)}</option>`).join("")}</select></div>
+  <div>${r.adults}<small>adults</small></div><div>${r.kids}<small>kids</small></div><div>${esc(r.diet||"")}${r.note?`<small>${esc(r.note)}</small>`:""}</div><button class="x" data-r="${r.id}" aria-label="Delete reply">×</button></div>`}).join(""):`<p class="sub" style="padding:10px 0">No replies match yet.</p>`;
+ const d=yes.filter(r=>r.diet);$("#diet").innerHTML=`<h3>Dietary needs for catering</h3>`+(d.length?d.map(r=>`<div class="tr" style="grid-template-columns:1fr 2fr"><div><b>${esc(r.child_name)}</b><small>${esc(r.parent_name)}</small></div><div>${esc(r.diet)}</div></div>`).join(""):`<p class="sub">None reported yet.</p>`);
+ $("#await").innerHTML=`<h3>Haven't replied yet (${wait.length})</h3>`+(wait.length?wait.map(g=>`<div class="gr" style="grid-template-columns:1fr auto auto"><div><b>${esc(g.label)}</b><span class="cb ${tc(g.child)}">${esc(tn(g.child))}</span></div><code>${fmt(g.code)}</code><button class="x" data-c="${g.code}" aria-label="Copy link">📋</button></div>`).join(""):`<p class="sub">Everyone on your list has replied.</p>`);
+ $$("[data-ss]").forEach(e=>e.onchange=async()=>{const st=e.value,u={status:st,updated_at:new Date().toISOString()};if(st==="no"){u.adults=0;u.kids=0}const {error}=await sb.from("rsvps").update(u).eq("id",e.dataset.ss);toast(error?"Couldn't update":"Reply updated");load()});
+ $$("[data-r]").forEach(b=>b.onclick=async()=>{if(confirm("Delete this reply?")){await sb.from("rsvps").delete().eq("id",b.dataset.r);load()}});
+ $$("[data-c]").forEach(b=>b.onclick=()=>cp(b.dataset.c));
+ rows.forEach(r=>seen.add(r.id+r.updated_at))}
+const cp=async c=>{try{await navigator.clipboard.writeText(link(c));toast("Invite link copied")}catch(e){toast("Code: "+fmt(c))}};
+$("#q").oninput=drawOver;
+$("#mad").onclick=async()=>{const p=$("#mp").value.trim(),k=$("#mk").value.trim()||"Whānau";if(!p)return;
+ const {error}=await sb.from("rsvps").insert({party:PARTY,child:lf==="all"?CT.children[0].id:lf,parent_name:p,child_name:k,status:"yes",adults:+$("#ma").value||1,kids:+$("#mkk").value||0,note:"Added by host",source:"manual"});
+ if(error)toast("Couldn't add that reply");else{["#mp","#mk","#ma","#mkk"].forEach(i=>$(i).value="");load()}};
+const dl=(n,t,m="text/csv")=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click()},E=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+$("#csv").onclick=()=>dl("rsvps.csv",["Updated,List,Parent,Child,Status,Adults,Kids,Dietary,Phone,Note",...rows.map(r=>[r.updated_at,tn(r.child),r.parent_name,r.child_name,r.status,r.adults,r.kids,r.diet,r.phone,r.note].map(E).join(","))].join("\n"));
+
+/* ---------- guests & codes ---------- */
+function drawGuests(){if($("#app").classList.contains("hide"))return;
+ tab($("#gseg"),types().map(t=>[t.id,t.id==="family"?"Whānau invite":t.name+"'s invite"]),()=>gc,k=>gc=k);
+ const s=$("#gq").value.toLowerCase().replace(/-/g,""),opt=g=>types().map(t=>`<option value="${t.id}" ${t.id===g.child?"selected":""}>${t.id==="family"?"Whānau invite":t.name+"'s list"}</option>`).join("");
+ const V=guests.filter(g=>!s||(g.label+g.code).toLowerCase().includes(s));
+ $("#glist").innerHTML=V.length?V.map(g=>{const r=rows.find(x=>x.guest_id===g.id);return `<div class="gr"><input data-gl="${g.id}" value="${esc(g.label)}" aria-label="Family name"><select data-gt="${g.id}" aria-label="Invite type">${opt(g)}</select><code>${fmt(g.code)}</code><div>${r?`<span class="pill ${r.status==="yes"?"y":r.status==="maybe"?"m":"n"}">${r.status==="no"?"Can't":r.status[0].toUpperCase()+r.status.slice(1)}</span>`:`<span class="sub">No reply</span>`}</div><div><button class="x" data-gcp="${g.code}" title="Copy invite link">📋</button><button class="x" data-gre="${g.id}" title="New code">↻</button><button class="x" data-gd="${g.id}" title="Delete">×</button></div></div>`}).join(""):`<p class="sub">No invites yet. Add some above.</p>`;
+ $$("[data-gl]").forEach(e=>e.onchange=async()=>{const v=e.value.trim();if(!v)return drawGuests();const {error}=await sb.from("guests").update({label:v}).eq("id",e.dataset.gl);toast(error?"Couldn't save":"Family name updated everywhere");load()});
+ $$("[data-gt]").forEach(e=>e.onchange=async()=>{const id=e.dataset.gt,{error}=await sb.from("guests").update({child:e.value}).eq("id",id);await sb.from("rsvps").update({child:e.value}).eq("guest_id",id);toast(error?"Couldn't save":"Invite type changed");load()});
+ $$("[data-gcp]").forEach(b=>b.onclick=()=>cp(b.dataset.gcp));
+ $$("[data-gre]").forEach(b=>b.onclick=async()=>{if(confirm("Make a new code? The code already printed on their invitation will stop working.")){const {error}=await sb.from("guests").update({code:gen()}).eq("id",b.dataset.gre);toast(error?"Couldn't change code":"New code created");load()}});
+ $$("[data-gd]").forEach(b=>b.onclick=async()=>{if(confirm("Delete this invite and their reply?")){await sb.from("guests").delete().eq("id",b.dataset.gd);load()}})}
+$("#gq").oninput=drawGuests;
+$("#gadd").onclick=async()=>{const L=$("#gl").value.split("\n").map(x=>x.trim()).filter(Boolean);if(!L.length)return;
+ const {error}=await sb.from("guests").insert(L.map(label=>({party:PARTY,child:gc,label,code:gen()})));if(error)return toast("Couldn't add invites, try again");$("#gl").value="";toast(`${L.length} code${L.length>1?"s":""} created`);load()};
+$("#gcsv").onclick=()=>dl("invite-codes.csv",["Guest,Invite type,Code,Link",...guests.map(g=>[g.label,tn(g.child),fmt(g.code),link(g.code)].map(E).join(","))].join("\n"));
+
+/* ---------- invitation content editor ---------- */
+const get=(o,p)=>p.split(".").reduce((x,k)=>x==null?x:x[k],o),set=(o,p,v)=>{const k=p.split("."),l=k.pop();k.reduce((x,y)=>x[y],o)[l]=v};
+const fld=(l,p,o={})=>`<div><label>${l}</label>${o.area?`<textarea data-p="${p}" rows="2">${esc(get(CT,p))}</textarea>`:`<input data-p="${p}" type="${o.t||"text"}" value="${esc(get(CT,p))}">`}</div>`;
+const BLANK={chips:"",plan:["","","","🎈"],know:["",""],"contact.people":{name:"",phone:""}};
+const lst=(t,path,cols,hint)=>{const arr=get(CT,path)||[];return `<h4 style="margin:14px 0 6px">${t}</h4>${hint?`<p class="hint">${hint}</p>`:""}`+arr.map((it,i)=>`<div class="li">${cols.map(c=>`<input data-p="${path}.${i}${c.k==null?"":"."+c.k}" value="${esc(c.k==null?it:it[c.k])}" placeholder="${c.l}" style="flex:${c.f||1}">`).join("")}<span class="ops"><button data-op="up" data-p="${path}" data-i="${i}" title="Move up">↑</button><button data-op="dn" data-p="${path}" data-i="${i}" title="Move down">↓</button><button data-op="del" data-p="${path}" data-i="${i}" title="Delete">×</button></span></div>`).join("")+`<button class="add" data-op="add" data-p="${path}">+ Add</button>`};
+const tz=()=>(CT.start||"").slice(19)||"+13:00";
+function renderEd(){
+ $("#ed").innerHTML=`<details open><summary>The birthday children</summary>${CT.children.map((c,i)=>`<div class="row2">${fld("Given name(s)",`children.${i}.given`)}${fld("Māori name (full)",`children.${i}.maori`)}${fld("Short name (used in text)",`children.${i}.short`)}${fld("Surname",`children.${i}.family`)}</div>${fld("Turning",`children.${i}.age`,{t:"number"})}<hr style="border:0;border-top:1px solid var(--ln);margin:14px 0 0">`).join("")}</details>
+ <details open><summary>Greetings &amp; placeholders</summary><div class="tok">Type these anywhere in the invitation text and they fill in automatically: <b>{family}</b> the family name on the invite · <b>{name}</b> and <b>{age}</b> the birthday child · <b>{other}</b> the other child · <b>{a}</b> <b>{b}</b> the two children · <b>{date}</b> · <b>{venue}</b></div>
+  ${fld("Greeting on guest invitations","greeting")}${fld("Whānau invitation greeting","family.kicker")}${fld("Whānau invitation message","family.note",{area:1})}</details>
+ <details><summary>Date, time &amp; place</summary>${fld("Date (as shown)","date")}<div class="row2">${fld("Doors open (as shown)","doors")}<div><label>Timezone offset</label><input data-p="tz" value="${esc(tz())}"></div><div><label>Starts</label><input type="datetime-local" data-dt="start" value="${esc((CT.start||"").slice(0,16))}"></div><div><label>Ends</label><input type="datetime-local" data-dt="end" value="${esc((CT.end||"").slice(0,16))}"></div></div>
+  <p class="hint">Offset: +13:00 during NZ daylight saving (late Sept to early April), +12:00 otherwise. It sets the calendar times.</p>
+  <div class="row2">${fld("Venue name","venue.n")}${fld("Venue address","venue.a")}${fld("Rain plan venue","rain.n")}${fld("Rain plan address","rain.a")}</div></details>
+ <details><summary>Highlights &amp; day plan</summary>${fld("All-day note (above the timeline)","allday")}${lst("Highlight chips","chips",[{l:"🏰 Chip text"}])}${lst("Timeline","plan",[{k:0,l:"Time",f:.8},{k:1,l:"Title",f:1.4},{k:2,l:"Description",f:2.4},{k:3,l:"🙂",f:.35}],"Time, title, description and an emoji for each stop.")}</details>
+ <details><summary>Good to know</summary>${lst("Cards","know",[{k:0,l:"Title",f:1},{k:1,l:"Text",f:2.5}])}</details>
+ <details><summary>Contact details (shown after someone RSVPs)</summary>${fld("Heading","contact.name")}${fld("Email","contact.email")}${lst("Phone numbers","contact.people",[{k:"name",l:"Name",f:1},{k:"phone",l:"Mobile",f:1.4}])}</details>`}
+let ct=null;
+function changed(){dirty=true;$("#dirty").textContent="Unpublished changes";clearTimeout(ct);ct=setTimeout(sendPv,200)}
+$("#ed").oninput=e=>{const t=e.target;if(t.dataset.dt){CT[t.dataset.dt]=t.value+":00"+tz()}else if(t.dataset.p==="tz"){}else if(t.dataset.p){set(CT,t.dataset.p,t.type==="number"?+t.value:t.value)}else return;changed()};
+$("#ed").onchange=e=>{if(e.target.dataset.p==="tz"){const z=e.target.value.trim();["start","end"].forEach(k=>CT[k]=CT[k].slice(0,19)+z);changed()}};
+$("#ed").onclick=e=>{const b=e.target.closest("[data-op]");if(!b)return;const p=b.dataset.p,i=+b.dataset.i,a=get(CT,p),o=b.dataset.op;
+ if(o==="add")a.push(copy(BLANK[p]));if(o==="del")a.splice(i,1);if(o==="up"&&i>0)[a[i-1],a[i]]=[a[i],a[i-1]];if(o==="dn"&&i<a.length-1)[a[i+1],a[i]]=[a[i],a[i+1]];renderEd();changed()};
+function drawPv(){tab($("#pvt"),types().map(t=>[t.id,t.id==="family"?"Whānau invite":t.name+"'s invite"]),()=>pc,k=>{pc=k;sendPv()});sendPv()}
+let ready=false;const sendPv=()=>{const f=$("#fr");if(ready&&f.contentWindow)f.contentWindow.postMessage({type:"ormsby-preview",content:CT,label:$("#pl").value||"The Rewi whānau",child:pc},location.origin)};
+addEventListener("message",e=>{if(e.origin===location.origin&&e.data&&e.data.type==="ormsby-ready"){ready=true;sendPv()}});
+$("#pl").oninput=sendPv;$("#pplay").onclick=()=>$("#fr").contentWindow.postMessage({type:"ormsby-intro"},location.origin);
+$("#save").onclick=async()=>{const {error}=await sb.from("party_content").upsert({party:PARTY,content:CT,updated_at:new Date().toISOString()});if(error)return toast("Couldn't publish. Check your connection.");dirty=false;$("#dirty").textContent="";toast("Published. Guests now see the new invitation")};
+$("#reset").onclick=()=>{if(confirm("Replace everything above with the starting copy from config.js? (Not live until you publish.)")){CT=copy(CFG.DEFAULT);renderEd();drawPv();changed()}};
+$("#ics").onclick=()=>{const z=d=>new Date(d).toISOString().replace(/[-:]|\.\d{3}/g,""),e=s=>s.replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
+ dl("party.ics",["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Ormsby Invites//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH","BEGIN:VEVENT","UID:"+PARTY+"-party@ormsby-invites","DTSTAMP:"+z(new Date()),"DTSTART:"+z(CT.start),"DTEND:"+z(CT.end),"SUMMARY:"+e("Shared Birthday Party: "+CT.children.map(c=>`${c.short} (${c.age})`).join(" & ")),"LOCATION:"+e(CT.venue.n+", "+CT.venue.a),"DESCRIPTION:"+e("Doors open "+CT.doors+". Rain plan: "+CT.rain.n+", "+CT.rain.a),"BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:Party tomorrow!","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n")+"\r\n","text/calendar");toast("Upload this party.ics next to index.html")};
+addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+(async()=>{if(!sb)return;const {data}=await sb.auth.getSession();if(data.session)start()})();
+</script></body></html>
