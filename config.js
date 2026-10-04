@@ -1,7 +1,7 @@
 /* Shared settings for index.html (guests) and admin.html (you). Edit here once. */
 window.ORMSBY={
- SUPABASE_URL:"YOUR_SUPABASE_URL",
- SUPABASE_ANON_KEY:"YOUR_SUPABASE_ANON_KEY",
+ SUPABASE_URL:"https://froarpqbyfovntuaetgs.supabase.co",
+ SUPABASE_ANON_KEY:"sb_publishable_ShWvCdust3EiGrIgCXkJDg_a7gdVXUZ",
  PARTY:"oct-2026-shared",
  /* Starting copy. Once you press "Publish changes" in admin, the live copy lives in Supabase and overrides this. */
  DEFAULT:{
