@@ -15,7 +15,7 @@ window.ORMSBY={
   allday:"The bouncy castle is open all day, start to finish.",
   chips:["🏰 Bouncy castle all day","🐴 Ponies and mini horses","👗 Relaxed, weather-appropriate","☕ Worry-free for Mum and Dad"],
   plan:[["11:00 AM","Doors open","Snacks and nibbles on arrival. Settle in and head for the bouncy castle.","🚪"],
-   ["11:30 AM","Ponies and mini horses arrive","Come and meet them. Rides start now.","🐴"],
+   ["11:30 AM","Ponies and mini horses arrive","Come and meet them, saddle up and take a ride!","🐴"],
    ["12:00 PM","Pass the parcel","A calm gather-round before lunch.","🎁"],
    ["12:30 PM","Lunch","Food for the kids, with juice or water. Grown-ups are looked after too.","🍕"],
    ["12:45 PM","Cake and singing","Straight after lunch. Little ones don't cope well with coming and going, so we keep them settled from lunch through cake.","🎂"],
@@ -25,6 +25,6 @@ window.ORMSBY={
    ["3:00 PM","Home time","Thank you for celebrating with us.","🏡"]],
   know:[["🍹 For the kids","Juice and water with their food."],["☕ For Mum and Dad","Fizzy, tea, coffee and food are all provided. Completely worry-free."],["👗 Dress code","Relaxed and weather-appropriate."]],
   family:{kicker:"Kia ora {family}, e te whānau 💜",note:"You're not just guests, you're whānau. Come early, stay late, and bring everyone who belongs with us."},
-  contact:{name:"The Ormsby whānau",email:"TOrmsby.LDavison@gmail.com",people:[{name:"Laura",phone:"027 925 3746"},{name:"Tūrei",phone:"027 272 0383"}]}
+  contact:{name:"Turei & Laura",email:"TOrmsby.LDavison@gmail.com",people:[{name:"Laura",phone:"027 925 3746"},{name:"Tūrei",phone:"027 272 0383"}]}
  }
 };
