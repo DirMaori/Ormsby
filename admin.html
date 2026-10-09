@@ -47,16 +47,16 @@ details{background:var(--sf);border:1px solid var(--ln);border-radius:18px;paddi
  </section>
 
  <section id="t-guests" class="hide">
-  <div class="panel"><h3>Add invites</h3><p class="sub">One family or guest per line. Each gets a unique code to print on their invitation.</p>
-   <textarea id="gl" rows="4" placeholder="The Smith whānau&#10;Nan &amp; Pop Ormsby"></textarea><div class="bar" id="gseg"></div><button class="btn" id="gadd">Generate codes</button></div>
+  <div class="panel"><h3>Add invites</h3><p class="sub">One guest per line. Each gets a unique code to print on their invitation. Use the child's name for guest invitations: it shows on the invitation and fills in (and locks) the "Child's name" box on their RSVP form. For whānau invites use a family name like Nan &amp; Pop Ormsby.</p>
+   <textarea id="gl" rows="4" placeholder="Mia&#10;Leo and Ruby"></textarea><div class="bar" id="gseg"></div><button class="btn" id="gadd">Generate codes</button></div>
   <div class="bar"><input id="gq" placeholder="Search guests or codes…"><button id="gcsv">Export codes for printing</button></div>
   <div class="panel" id="glist"></div>
  </section>
 
  <section id="t-edit" class="hide">
-  <p class="sub">Edit the words below and watch the invitation change on the right. Nothing goes live until you press <b>Publish changes</b>. Changing a family name in Guests &amp; codes updates the invitation straight away.</p>
+  <p class="sub">Edit the words below and watch the invitation change on the right. Nothing goes live until you press <b>Publish changes</b>. Changing a guest's name in Guests &amp; codes updates the invitation and their RSVP form straight away.</p>
   <div class="split"><div id="ed"></div>
-   <div class="pvwrap"><div class="bar" id="pvt" style="margin-top:0"></div><div class="row2"><input id="pl" value="The Rewi whānau" aria-label="Sample family name"><button class="btn" id="pplay">▶ Replay intro</button></div><iframe id="fr" src="index.html?preview=1" title="Invitation preview"></iframe></div></div>
+   <div class="pvwrap"><div class="bar" id="pvt" style="margin-top:0"></div><div class="row2"><input id="pl" value="Mia" aria-label="Sample guest name"><button class="btn" id="pplay">▶ Replay intro</button></div><iframe id="fr" src="index.html?preview=1" title="Invitation preview"></iframe></div></div>
   <div class="savebar"><span id="dirty"></span><button id="ics">Download party.ics</button><button id="reset">Reset to starting copy</button><button class="btn" id="save">Publish changes</button></div>
  </section>
 </div></div><div id="toast"></div>
@@ -131,8 +131,8 @@ function drawGuests(){if($("#app").classList.contains("hide"))return;
  tab($("#gseg"),types().map(t=>[t.id,t.id==="family"?"Whānau invite":t.name+"'s invite"]),()=>gc,k=>gc=k);
  const s=$("#gq").value.toLowerCase().replace(/-/g,""),opt=g=>types().map(t=>`<option value="${t.id}" ${t.id===g.child?"selected":""}>${t.id==="family"?"Whānau invite":t.name+"'s list"}</option>`).join("");
  const V=guests.filter(g=>!s||(g.label+g.code).toLowerCase().includes(s));
- $("#glist").innerHTML=V.length?V.map(g=>{const r=rows.find(x=>x.guest_id===g.id);return `<div class="gr"><input data-gl="${g.id}" value="${esc(g.label)}" aria-label="Family name"><select data-gt="${g.id}" aria-label="Invite type">${opt(g)}</select><code>${fmt(g.code)}</code><div>${r?`<span class="pill ${r.status==="yes"?"y":r.status==="maybe"?"m":"n"}">${r.status==="no"?"Can't":r.status[0].toUpperCase()+r.status.slice(1)}</span>`:`<span class="sub">No reply</span>`}</div><div><button class="x" data-gcp="${g.code}" title="Copy invite link">📋</button><button class="x" data-gre="${g.id}" title="New code">↻</button><button class="x" data-gd="${g.id}" title="Delete">×</button></div></div>`}).join(""):`<p class="sub">No invites yet. Add some above.</p>`;
- $$("[data-gl]").forEach(e=>e.onchange=async()=>{const v=e.value.trim();if(!v)return drawGuests();const {error}=await sb.from("guests").update({label:v}).eq("id",e.dataset.gl);toast(error?"Couldn't save":"Family name updated everywhere");load()});
+ $("#glist").innerHTML=V.length?V.map(g=>{const r=rows.find(x=>x.guest_id===g.id);return `<div class="gr"><input data-gl="${g.id}" value="${esc(g.label)}" aria-label="Guest name"><select data-gt="${g.id}" aria-label="Invite type">${opt(g)}</select><code>${fmt(g.code)}</code><div>${r?`<span class="pill ${r.status==="yes"?"y":r.status==="maybe"?"m":"n"}">${r.status==="no"?"Can't":r.status[0].toUpperCase()+r.status.slice(1)}</span>`:`<span class="sub">No reply</span>`}</div><div><button class="x" data-gcp="${g.code}" title="Copy invite link">📋</button><button class="x" data-gre="${g.id}" title="New code">↻</button><button class="x" data-gd="${g.id}" title="Delete">×</button></div></div>`}).join(""):`<p class="sub">No invites yet. Add some above.</p>`;
+ $$("[data-gl]").forEach(e=>e.onchange=async()=>{const v=e.value.trim();if(!v)return drawGuests();const {error}=await sb.from("guests").update({label:v}).eq("id",e.dataset.gl);toast(error?"Couldn't save":"Guest name updated everywhere");load()});
  $$("[data-gt]").forEach(e=>e.onchange=async()=>{const id=e.dataset.gt,{error}=await sb.from("guests").update({child:e.value}).eq("id",id);await sb.from("rsvps").update({child:e.value}).eq("guest_id",id);toast(error?"Couldn't save":"Invite type changed");load()});
  $$("[data-gcp]").forEach(b=>b.onclick=()=>cp(b.dataset.gcp));
  $$("[data-gre]").forEach(b=>b.onclick=async()=>{if(confirm("Make a new code? The code already printed on their invitation will stop working.")){const {error}=await sb.from("guests").update({code:gen()}).eq("id",b.dataset.gre);toast(error?"Couldn't change code":"New code created");load()}});
@@ -150,7 +150,7 @@ const lst=(t,path,cols,hint)=>{const arr=get(CT,path)||[];return `<h4 style="mar
 const tz=()=>(CT.start||"").slice(19)||"+13:00";
 function renderEd(){
  $("#ed").innerHTML=`<details open><summary>The birthday children</summary>${CT.children.map((c,i)=>`<div class="row2">${fld("Given name(s)",`children.${i}.given`)}${fld("Māori name (full)",`children.${i}.maori`)}${fld("Short name (used in text)",`children.${i}.short`)}${fld("Surname",`children.${i}.family`)}</div>${fld("Turning",`children.${i}.age`,{t:"number"})}<hr style="border:0;border-top:1px solid var(--ln);margin:14px 0 0">`).join("")}</details>
- <details open><summary>Greetings &amp; placeholders</summary><div class="tok">Type these anywhere in the invitation text and they fill in automatically: <b>{family}</b> the family name on the invite · <b>{name}</b> and <b>{age}</b> the birthday child · <b>{other}</b> the other child · <b>{a}</b> <b>{b}</b> the two children · <b>{date}</b> · <b>{venue}</b></div>
+ <details open><summary>Greetings &amp; placeholders</summary><div class="tok">Type these anywhere in the invitation text and they fill in automatically: <b>{family}</b> the guest name you typed for that code · <b>{name}</b> and <b>{age}</b> the birthday child · <b>{other}</b> the other child · <b>{a}</b> <b>{b}</b> the two children · <b>{date}</b> · <b>{venue}</b></div>
   ${fld("Greeting on guest invitations","greeting")}${fld("Whānau invitation greeting","family.kicker")}${fld("Whānau invitation message","family.note",{area:1})}</details>
  <details><summary>Date, time &amp; place</summary>${fld("Date (as shown)","date")}<div class="row2">${fld("Doors open (as shown)","doors")}<div><label>Timezone offset</label><input data-p="tz" value="${esc(tz())}"></div><div><label>Starts</label><input type="datetime-local" data-dt="start" value="${esc((CT.start||"").slice(0,16))}"></div><div><label>Ends</label><input type="datetime-local" data-dt="end" value="${esc((CT.end||"").slice(0,16))}"></div></div>
   <p class="hint">Offset: +13:00 during NZ daylight saving (late Sept to early April), +12:00 otherwise. It sets the calendar times.</p>
