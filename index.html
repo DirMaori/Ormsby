@@ -370,7 +370,7 @@ function cinematic(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)re
  $$("#cine h1").forEach(h=>{const m=Math.min(innerWidth,1000)-48;if(h.scrollWidth>m)h.style.fontSize=parseFloat(getComputedStyle(h).fontSize)*m/h.scrollWidth+"px"});
  (cinematic.t||[]).forEach(clearTimeout);const Tm=cinematic.t=[];let opened=false,ended=false;
  const open=()=>{if(!opened){opened=true;openInv()}},end=()=>{if(ended)return;ended=true;open();el.classList.add("out");Tm.push(setTimeout(()=>{el.className="cine hide";el.innerHTML=""},1350))};
- const total=(last+1.8)*1000;Tm.push(setTimeout(()=>el.classList.add("on","play"),30),setTimeout(open,total-300),setTimeout(end,total));el.onclick=end}
+ const total=(last+3.5)*1000;Tm.push(setTimeout(()=>el.classList.add("on","play"),30),setTimeout(open,total-300),setTimeout(end,total));el.onclick=end}
 
 /* ---- live preview from admin.html (same-origin only; renders whatever content it is sent, nothing else) ---- */
 addEventListener("message",e=>{if(e.origin!==location.origin||!e.data)return;const d=e.data;
