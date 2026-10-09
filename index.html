@@ -302,7 +302,7 @@ function openInv(){const f=fam(),A=EV.children[0],B=EV.children[1],cur=f?A:C(G.c
  document.title=f?`You're invited: ${A.short} & ${B.short}'s birthday`:`You're invited: ${cur.short}'s birthday`;
  $("#head").className="head"+(f?" fam":v);
  $("#head").innerHTML=`<img class="mini" src="${CREST}" alt="">`+(f?
-  `<p>${T(EV.family.kicker)}<br>You're invited to celebrate</p><div class="twoname"><h1 class="n1">${esc(A.short)}</h1><span class="amp">&amp;</span><h1 class="n2">${esc(B.short)}</h1></div><div class="tags"><span class="tag">Turns ${A.age} 🎂</span><span class="tag">Turns ${B.age} 🎂</span></div><div class="banner">${T(EV.family.note)}</div>`
+  `<p>${T(EV.family.kicker)}<br>You're invited to celebrate</p><div class="twoname"><h1 class="n1">${esc(A.short)}</h1><span class="amp">&amp;</span><h1 class="n2">${esc(B.short)}</h1></div><div class="tags"><span class="tag">Turning ${A.age} 🎂</span><span class="tag">Turns ${B.age} 🎂</span></div><div class="banner">${T(EV.family.note)}</div>`
   :`<p>${T(EV.greeting)}<br>You're invited to celebrate</p><h1>${esc(cur.short)}</h1><div class="full">${esc(cur.given)} ${esc(cur.maori)} ${esc(cur.family)}</div><span class="tag">Turns ${cur.age} 🎂</span><div class="banner">🎈 <b>Shared birthday party</b> with ${esc(o.short)}, who also turns ${o.age}.</div>`);
  $("#kv").innerHTML=`<div><small>When</small><b>${esc(EV.date.replace(/ \d{4}$/,""))}</b><span>Doors open ${esc(EV.doors)}</span></div><div><small>Where</small><b>${esc(EV.venue.n)}</b><span>${esc(EV.venue.a)}</span></div>`;
  $("#chips").innerHTML=EV.chips.map(c=>`<span>${T(c)}</span>`).join("");$("#allday").textContent=fill(EV.allday);
