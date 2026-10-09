@@ -366,7 +366,7 @@ function cinematic(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)re
  try{document.activeElement.blur()}catch(e){}
  el.className="cine";el.style.setProperty("--g",f?"190,70,230":idx(G.child)?"139,43,255":"255,46,147");
  const nm=(c,base)=>{const n=[...c.short];return `<h1>${n.map((ch,i)=>{const t=i/Math.max(1,n.length-1),k=a.map((v,j)=>Math.round(v+(b[j]-v)*t));return `<span class="l" style="--d:${(base+i*.07).toFixed(2)}s;color:rgb(${k})">${ch===" "?"&nbsp;":esc(ch)}</span>`}).join("")}</h1>`};
- const last=1.6+(list.length-1)*1.1+.9,tags=list.map((c,i)=>`<span class="c4" style="animation-delay:${(last+.2+i*.25).toFixed(2)}s">Turns ${c.age} 🎂</span>`).join(" ");
+ const last=1.6+(list.length-1)*1.1+.9,tags=list.map((c,i)=>`<span class="c4" style="animation-delay:${(last+.2+i*.25).toFixed(2)}s">Turning ${c.age} 🎂</span>`).join(" ");
  el.innerHTML=`<div><p class="c1">${T(f?EV.family.kicker:EV.greeting)}</p><p class="c2">You're invited to celebrate</p>${list.map((c,i)=>nm(c,1.6+i*1.1)).join("")}${tags}</div><div class="skip">Tap to skip</div>`;
  $$("#cine h1").forEach(h=>{const m=Math.min(innerWidth,1000)-48;if(h.scrollWidth>m)h.style.fontSize=parseFloat(getComputedStyle(h).fontSize)*m/h.scrollWidth+"px"});
  (cinematic.t||[]).forEach(clearTimeout);const Tm=cinematic.t=[];let opened=false,ended=false;
