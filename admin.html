@@ -28,6 +28,7 @@ details{background:var(--sf);border:1px solid var(--ln);border-radius:18px;paddi
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:2fr 2fr 1fr;gap:10px}
 .savebar{position:sticky;bottom:0;z-index:5;display:flex;gap:8px;align-items:center;justify-content:flex-end;padding:12px 0;margin-top:10px;background:linear-gradient(transparent,#000 35%)}#dirty{margin-right:auto;color:var(--pk);font-weight:600;font-size:13px}.savebar button:not(.btn){background:var(--sf);border:1px solid var(--ln);padding:10px 16px;font-weight:600}
 .err{color:#ff6b9d;font-size:13px;margin-top:8px}.tok{background:#000;border:1px dashed var(--ln);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--mut);margin:6px 0 4px}.tok b{color:#ff6bb5;font-weight:600}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:30;display:flex;align-items:center;justify-content:center;padding:16px}.mbox{width:100%;max-width:520px;max-height:92vh;overflow:auto;background:var(--sf);border:1px solid var(--ln);border-radius:24px;padding:20px}
 #toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translate(-50%,-150px);background:var(--pv);font-weight:700;padding:12px 20px;border-radius:16px;z-index:9;transition:transform .35s;max-width:92vw;text-align:center}#toast.show{transform:translate(-50%,0)}
 @media(max-width:980px){.split{grid-template-columns:1fr}.pvwrap{position:static}#fr{height:720px}.stats{grid-template-columns:repeat(2,1fr)}.tr{grid-template-columns:1fr auto}.tr>:nth-child(3),.tr>:nth-child(4){display:none}.gr{grid-template-columns:1fr 1fr}.row3{grid-template-columns:1fr}}
 </style></head><body><div class="wrap">
@@ -59,7 +60,8 @@ details{background:var(--sf);border:1px solid var(--ln);border-radius:18px;paddi
    <div class="pvwrap"><div class="bar" id="pvt" style="margin-top:0"></div><div class="row2"><input id="pl" value="Mia" aria-label="Sample guest name"><button class="btn" id="pplay">▶ Replay intro</button></div><iframe id="fr" src="index.html?preview=1" title="Invitation preview"></iframe></div></div>
   <div class="savebar"><span id="dirty"></span><button id="ics">Download party.ics</button><button id="reset">Reset to starting copy</button><button class="btn" id="save">Publish changes</button></div>
  </section>
-</div></div><div id="toast"></div>
+</div></div><div class="modal hide" id="editm"><div class="mbox"><h3 id="et">Edit reply</h3><div id="ef"></div><div class="bar" style="margin-top:16px"><button class="btn" id="esave">Save changes</button><button id="ecancel">Cancel</button></div></div></div>
+<div id="toast"></div>
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
@@ -89,7 +91,7 @@ async function start(){$("#login").classList.add("hide");$("#app").classList.rem
  tab($("#tabs"),[["over","Overview"],["guests","Guests & codes"],["edit","Invitations"]],()=>curTab,k=>{curTab=k;["over","guests","edit"].forEach(t=>$("#t-"+t).classList.toggle("hide",t!==k))});
  await load();renderEd();drawPv();
  if(!chan)chan=sb.channel("rsvps").on("postgres_changes",{event:"*",schema:"public",table:"rsvps",filter:"party=eq."+PARTY},p=>{const r=p.new;
-  if(r&&r.source!=="manual"){const t=`${r.parent_name} (${tn(r.child)}): ${r.status==="yes"?"coming":r.status==="maybe"?"maybe":"can't come"}`;toast((p.eventType==="UPDATE"?"Updated RSVP: ":"New RSVP: ")+t);
+  if(r&&r.source!=="manual"&&!mine.has(r.id)){const t=`${r.parent_name} (${tn(r.child)}): ${r.status==="yes"?"coming":r.status==="maybe"?"maybe":"can't come"}`;toast((p.eventType==="UPDATE"?"Updated RSVP: ":"New RSVP: ")+t);
    try{if(Notification.permission==="granted")new Notification("RSVP",{body:t})}catch(e){}if(navigator.vibrate)navigator.vibrate(120)}load()}).subscribe();
  try{if("Notification" in window&&Notification.permission==="default")Notification.requestPermission()}catch(e){}}
 let curTab="over";
@@ -111,13 +113,27 @@ function drawOver(){if(!$("#app")||$("#app").classList.contains("hide"))return;
  $("#rows").innerHTML=V.length?V.map(r=>{const isNew=!first&&!seen.has(r.id+r.updated_at);
   return `<div class="tr ${isNew?"new":""}"><div><b>${esc(r.parent_name)}</b><span class="cb ${tc(r.child)}">${esc(tn(r.child))}</span><small>${r.child==="family"?"Tamariki":"Child"}: ${esc(r.child_name)}${r.phone?" · "+esc(r.phone):""}</small><small>${new Date(r.updated_at).toLocaleString([], {day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})}</small></div>
   <div><select data-ss="${r.id}" aria-label="Status">${["yes","maybe","no"].map(v=>`<option value="${v}" ${v===r.status?"selected":""}>${v==="no"?"Can't":v[0].toUpperCase()+v.slice(1)}</option>`).join("")}</select></div>
-  <div>${r.adults}<small>adults</small></div><div>${r.kids}<small>kids</small></div><div>${esc(r.diet||"")}${r.note?`<small>${esc(r.note)}</small>`:""}</div><button class="x" data-r="${r.id}" aria-label="Delete reply">×</button></div>`}).join(""):`<p class="sub" style="padding:10px 0">No replies match yet.</p>`;
+  <div>${r.adults}<small>adults</small></div><div>${r.kids}<small>kids</small></div><div>${esc(r.diet||"")}${r.note?`<small>${esc(r.note)}</small>`:""}</div><div><button class="x" data-e="${r.id}" aria-label="Edit reply" title="Edit reply">✏️</button><button class="x" data-r="${r.id}" aria-label="Delete reply">×</button></div></div>`}).join(""):`<p class="sub" style="padding:10px 0">No replies match yet.</p>`;
  const d=yes.filter(r=>r.diet);$("#diet").innerHTML=`<h3>Dietary needs for catering</h3>`+(d.length?d.map(r=>`<div class="tr" style="grid-template-columns:1fr 2fr"><div><b>${esc(r.child_name)}</b><small>${esc(r.parent_name)}</small></div><div>${esc(r.diet)}</div></div>`).join(""):`<p class="sub">None reported yet.</p>`);
- $("#await").innerHTML=`<h3>Haven't replied yet (${wait.length})</h3>`+(wait.length?wait.map(g=>`<div class="gr" style="grid-template-columns:1fr auto auto"><div><b>${esc(g.label)}</b><span class="cb ${tc(g.child)}">${esc(tn(g.child))}</span></div><code>${fmt(g.code)}</code><button class="x" data-c="${g.code}" aria-label="Copy link">📋</button></div>`).join(""):`<p class="sub">Everyone on your list has replied.</p>`);
- $$("[data-ss]").forEach(e=>e.onchange=async()=>{const st=e.value,u={status:st,updated_at:new Date().toISOString()};if(st==="no"){u.adults=0;u.kids=0}const {error}=await sb.from("rsvps").update(u).eq("id",e.dataset.ss);toast(error?"Couldn't update":"Reply updated");load()});
+ $("#await").innerHTML=`<h3>Haven't replied yet (${wait.length})</h3>`+(wait.length?wait.map(g=>`<div class="gr" style="grid-template-columns:1fr auto auto auto"><div><b>${esc(g.label)}</b><span class="cb ${tc(g.child)}">${esc(tn(g.child))}</span></div><code>${fmt(g.code)}</code><button class="x" data-nr="${g.id}" aria-label="Add their reply" title="Add their reply">＋</button><button class="x" data-c="${g.code}" aria-label="Copy link">📋</button></div>`).join(""):`<p class="sub">Everyone on your list has replied.</p>`);
+ $$("[data-ss]").forEach(e=>e.onchange=()=>saveReply(e.dataset.ss,e.value==="no"?{status:"no",adults:0,kids:0}:{status:e.value}));
+ $$("[data-e]").forEach(b=>b.onclick=()=>openEdit(b.dataset.e));
+ $$("[data-nr]").forEach(b=>b.onclick=()=>openEdit(null,b.dataset.nr));
  $$("[data-r]").forEach(b=>b.onclick=async()=>{if(confirm("Delete this reply?")){await sb.from("rsvps").delete().eq("id",b.dataset.r);load()}});
  $$("[data-c]").forEach(b=>b.onclick=()=>cp(b.dataset.c));
  rows.forEach(r=>seen.add(r.id+r.updated_at))}
+const mine=new Set();let editId=null,editG=null;
+async function saveReply(id,u){mine.add(id);const {error}=await sb.from("rsvps").update(u).eq("id",id);setTimeout(()=>mine.delete(id),5000);toast(error?"Couldn't save that change":"Reply updated");load()}
+function openEdit(id,gid){const g=gid?guests.find(x=>x.id===gid):guests.find(x=>rows.find(r=>r.id===id)&&x.id===rows.find(r=>r.id===id).guest_id);editId=id;editG=gid?g:null;
+ const r=id?rows.find(x=>x.id===id):{parent_name:"",child_name:g&&g.child!=="family"?g.label:"",status:"yes",adults:1,kids:1,diet:"",phone:"",note:"",child:g?g.child:""},fam=r.child==="family",v=x=>esc(x??"");
+ $("#et").textContent=id?"Edit reply":"Add their reply";
+ $("#ef").innerHTML=`<p class="sub">${g?"Invite: <b>"+esc(g.label)+"</b> · ":""}${esc(tn(r.child))}</p><label>Parent / guardian name</label><input id="e_p" value="${v(r.parent_name)}"><label>${fam?"Tamariki coming":"Child's name"}</label><input id="e_c" value="${v(r.child_name)}"><label>Status</label><select id="e_s">${[["yes","Yes"],["maybe","Maybe"],["no","Can't"]].map(o=>`<option value="${o[0]}" ${o[0]===r.status?"selected":""}>${o[1]}</option>`).join("")}</select><div class="row2"><div><label>Adults</label><input id="e_a" type="number" min="0" max="20" inputmode="numeric" value="${r.adults}"></div><div><label>Kids</label><input id="e_k" type="number" min="0" max="20" inputmode="numeric" value="${r.kids}"></div></div><label>Allergies or dietary needs</label><input id="e_d" value="${v(r.diet)}"><label>Mobile</label><input id="e_ph" type="tel" value="${v(r.phone)}"><label>Message</label><textarea id="e_n" rows="2">${v(r.note)}</textarea>`;
+ $("#editm").classList.remove("hide")}
+$("#ecancel").onclick=()=>$("#editm").classList.add("hide");$("#editm").onclick=e=>{if(e.target.id==="editm")$("#editm").classList.add("hide")};
+$("#esave").onclick=async()=>{const n=x=>Math.max(0,Math.min(20,parseInt(x)||0)),st=$("#e_s").value,u={parent_name:$("#e_p").value.trim(),child_name:$("#e_c").value.trim()||"Whānau",status:st,adults:st==="no"?0:n($("#e_a").value),kids:st==="no"?0:n($("#e_k").value),diet:$("#e_d").value.trim()||null,phone:$("#e_ph").value.trim()||null,note:$("#e_n").value.trim()||null};
+ if(!u.parent_name)return toast("Add a parent name");
+ if(editId)await saveReply(editId,u);else{const {error}=await sb.from("rsvps").insert({...u,party:PARTY,child:editG.child,guest_id:editG.id,source:"manual"});toast(error?"Couldn't add that reply":"Reply added");load()}
+ $("#editm").classList.add("hide")};
 const cp=async c=>{try{await navigator.clipboard.writeText(link(c));toast("Invite link copied")}catch(e){toast("Code: "+fmt(c))}};
 $("#q").oninput=drawOver;
 $("#mad").onclick=async()=>{const p=$("#mp").value.trim(),k=$("#mk").value.trim()||"Whānau";if(!p)return;
