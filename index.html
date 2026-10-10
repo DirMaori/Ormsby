@@ -295,7 +295,7 @@ $("#back").onclick=()=>{try{localStorage.removeItem(KEY)}catch(e){}G=null;histor
 
 /* ---- calendar ---- */
 const z=d=>d.toISOString().replace(/[-:]|\.\d{3}/g,""),loc=()=>EV.venue.n+", "+EV.venue.a;
-const gcal=()=>`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${q("Shared Birthday Party: "+EV.children.map(c=>`${c.short} (${c.age})`).join(" & "))}&dates=${z(new Date(EV.start))}/${z(new Date(EV.end))}&location=${q(loc())}&details=${q("Doors open "+EV.doors+". Rain plan: "+EV.rain.n+", "+EV.rain.a)}`;
+const gcal=()=>`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${q("Shared Birthday Party: "+EV.children.map(c=>`${c.short} (${c.age})`).join(" & "))}&dates=${z(new Date(EV.start))}/${z(new Date(EV.end))}&location=${q(loc())}&details=${q("Gates open "+EV.doors+". Rain plan: "+EV.rain.n+", "+EV.rain.a)}`;
 const cal=()=>`<a class="btn alt" href="party.ics">🍎 Apple Calendar</a><a class="btn alt" target="_blank" rel="noopener" href="${gcal()}">📅 Google Calendar</a>`;
 
 /* ---- invitation ---- */
