@@ -272,7 +272,7 @@ const sb=(SUPABASE_URL.startsWith("YOUR_")||typeof supabase==="undefined")?null:
 const norm=s=>s.toUpperCase().replace(/[^A-Z0-9]/g,""),fmt=c=>c.replace(/(.{4})(.{4})/,"$1-$2");
 const C=id=>EV.children.find(c=>c.id===id)||EV.children[0],oth=id=>EV.children.find(c=>c.id!==C(id).id),idx=id=>EV.children.indexOf(C(id)),fam=()=>!!G&&G.child==="family";
 /* {family} {name} {age} {other} {otherAge} {a} {b} {ageA} {ageB} {date} {venue} placeholders in any invitation text */
-const fill=t=>String(t??"").replace(/\{(\w+)\}/g,(m,k)=>{const a=EV.children[0],b=EV.children[1],c=fam()||!G?a:C(G.child),o=fam()||!G?b:oth(G.child);const v={family:G&&G.label,name:c.short,age:c.age,other:o.short,otherAge:o.age,a:a.short,b:b.short,ageA:a.age,ageB:b.age,date:EV.date,venue:EV.venue.n}[k];return v==null?m:v}),T=t=>esc(fill(t));
+const fill=t=>String(t??"").replace(/\{(\w+)\}/g,(m,k)=>{const a=EV.children[0],b=EV.children[1],c=fam()||!G?a:C(G.child),o=fam()||!G?b:oth(G.child);const v={family:G&&G.label,name:c.short,age:c.age,other:o.short,otherAge:o.age,a:a.short,b:b.short,ageA:a.age,ageB:b.age,date:EV.date,venue:EV.venue.n}[k];return v==null?m:v}),T=t=>esc(fill(t)),GN=t=>esc(fill(String(t).replace(/\{family\}/g,"\u0001"))).replace(/\u0001/g,`<b class="gname">${esc(G.label)}</b>`);
 const flip=(el,fn)=>{el.classList.add("out");setTimeout(()=>{fn();el.classList.remove("out")},220)};
 const io="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.1}):null;
 const reveal=()=>setTimeout(()=>$$(".rv:not(.in)").forEach(e=>io?io.observe(e):e.classList.add("in")),30);
