@@ -71,6 +71,7 @@ const sb=ok?supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_ANON_KEY):null;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const copy=o=>JSON.parse(JSON.stringify(o));
 function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("show"),4500)}
+const MAPDEF={title:"Event map",caption:"Carpark, kai zone, parents' marquee, bouncy castle, sand zone and pony rides. Tap to open it full screen, then zoom in.",src:"event-map.jpg"};
 let CT=copy(CFG.DEFAULT||{}),rows=[],guests=[],lf="all",sf="all",gc="family",pc="family",seen=new Set(),first=true,chan=null,dirty=false;
 const types=()=>[...CT.children.map((c,i)=>({id:c.id,name:c.short,cls:i?"":"h"})),{id:"family",name:"Whānau",cls:"f"}];
 const tn=id=>(types().find(t=>t.id===id)||{name:id}).name,tc=id=>(types().find(t=>t.id===id)||{cls:""}).cls;
@@ -87,7 +88,7 @@ $("#pw").onkeydown=e=>{if(e.key==="Enter")$("#li").click()};
 $("#so").onclick=async()=>{await sb.auth.signOut();location.reload()};
 async function start(){$("#login").classList.add("hide");$("#app").classList.remove("hide");
  const {data}=await sb.from("party_content").select("content").eq("party",PARTY).maybeSingle();
- CT=copy({...CFG.DEFAULT,...(data&&data.content||{})});
+ CT=copy({...CFG.DEFAULT,...(data&&data.content||{})});if(!CT.map)CT.map=copy(MAPDEF);
  tab($("#tabs"),[["over","Overview"],["guests","Guests & codes"],["edit","Invitations"]],()=>curTab,k=>{curTab=k;["over","guests","edit"].forEach(t=>$("#t-"+t).classList.toggle("hide",t!==k))});
  await load();renderEd();drawPv();
  if(!chan)chan=sb.channel("rsvps").on("postgres_changes",{event:"*",schema:"public",table:"rsvps",filter:"party=eq."+PARTY},p=>{const r=p.new;
@@ -173,6 +174,7 @@ function renderEd(){
   <div class="row2">${fld("Venue name","venue.n")}${fld("Venue address","venue.a")}${fld("Rain plan venue","rain.n")}${fld("Rain plan address","rain.a")}</div></details>
  <details><summary>Highlights &amp; day plan</summary>${fld("All-day note (above the timeline)","allday")}${lst("Highlight chips","chips",[{l:"🏰 Chip text"}])}${lst("Timeline","plan",[{k:0,l:"Time",f:.8},{k:1,l:"Title",f:1.4},{k:2,l:"Description",f:2.4},{k:3,l:"🙂",f:.35}],"Time, title, description and an emoji for each stop.")}</details>
  <details><summary>Good to know</summary>${lst("Cards","know",[{k:0,l:"Title",f:1},{k:1,l:"Text",f:2.5}])}</details>
+ <details><summary>Event map</summary>${fld("Heading","map.title")}${fld("Caption","map.caption",{area:1})}${fld("Image file name (empty hides the map)","map.src")}<p class="hint">The image itself is a file on your host. Upload it next to index.html using exactly this file name, e.g. event-map.jpg.</p></details>
  <details><summary>Contact details (shown after someone RSVPs)</summary>${fld("Heading","contact.name")}${fld("Email","contact.email")}${lst("Phone numbers","contact.people",[{k:"name",l:"Name",f:1},{k:"phone",l:"Mobile",f:1.4}])}</details>`}
 let ct=null;
 function changed(){dirty=true;$("#dirty").textContent="Unpublished changes";clearTimeout(ct);ct=setTimeout(sendPv,200)}
@@ -185,7 +187,7 @@ let ready=false;const sendPv=()=>{const f=$("#fr");if(ready&&f.contentWindow)f.c
 addEventListener("message",e=>{if(e.origin===location.origin&&e.data&&e.data.type==="ormsby-ready"){ready=true;sendPv()}});
 $("#pl").oninput=sendPv;$("#pplay").onclick=()=>$("#fr").contentWindow.postMessage({type:"ormsby-intro"},location.origin);
 $("#save").onclick=async()=>{const {error}=await sb.from("party_content").upsert({party:PARTY,content:CT,updated_at:new Date().toISOString()});if(error)return toast("Couldn't publish. Check your connection.");dirty=false;$("#dirty").textContent="";toast("Published. Guests now see the new invitation")};
-$("#reset").onclick=()=>{if(confirm("Replace everything above with the starting copy from config.js? (Not live until you publish.)")){CT=copy(CFG.DEFAULT);renderEd();drawPv();changed()}};
+$("#reset").onclick=()=>{if(confirm("Replace everything above with the starting copy from config.js? (Not live until you publish.)")){CT=copy(CFG.DEFAULT);if(!CT.map)CT.map=copy(MAPDEF);renderEd();drawPv();changed()}};
 $("#ics").onclick=()=>{const z=d=>new Date(d).toISOString().replace(/[-:]|\.\d{3}/g,""),e=s=>s.replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
  dl("party.ics",["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Ormsby Invites//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH","BEGIN:VEVENT","UID:"+PARTY+"-party@ormsby-invites","DTSTAMP:"+z(new Date()),"DTSTART:"+z(CT.start),"DTEND:"+z(CT.end),"SUMMARY:"+e("Shared Birthday Party: "+CT.children.map(c=>`${c.short} (${c.age})`).join(" & ")),"LOCATION:"+e(CT.venue.n+", "+CT.venue.a),"DESCRIPTION:"+e("Doors open "+CT.doors+". Rain plan: "+CT.rain.n+", "+CT.rain.a),"BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:Party tomorrow!","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n")+"\r\n","text/calendar");toast("Upload this party.ics next to index.html")};
 addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
