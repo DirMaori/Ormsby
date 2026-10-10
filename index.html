@@ -305,7 +305,7 @@ function openInv(){const f=fam(),A=EV.children[0],B=EV.children[1],cur=f?A:C(G.c
  $("#head").innerHTML=`<img class="mini" src="${CREST}" alt="">`+(f?
   `<p>${GN(EV.family.kicker)}<br>You're invited to celebrate</p><div class="twoname"><h1 class="n1">${esc(A.short)}</h1><span class="amp">&amp;</span><h1 class="n2">${esc(B.short)}</h1></div><div class="tags"><span class="tag">Turning ${A.age} 🎂</span><span class="tag">Turning ${B.age} 🎂</span></div><div class="banner">${T(EV.family.note)}</div>`
   :`<p>${GN(EV.greeting)}<br>You're invited to celebrate</p><h1>${esc(cur.short)}</h1><div class="full">${esc(cur.given)} ${esc(cur.maori)} ${esc(cur.family)}</div><span class="tag">Turning ${cur.age} 🎂</span><div class="banner">🎈 <b>Shared birthday party</b> with ${esc(o.short)}, who also turns ${o.age}.</div>`);
- $("#kv").innerHTML=`<div><small>When</small><b>${esc(EV.date.replace(/ \d{4}$/,""))}</b><span>Doors open ${esc(EV.doors)}</span></div><div><small>Where</small><b>${esc(EV.venue.n)}</b><span>${esc(EV.venue.a)}</span></div>`;
+ $("#kv").innerHTML=`<div><small>When</small><b>${esc(EV.date.replace(/ \d{4}$/,""))}</b><span>Gates open ${esc(EV.doors)}</span></div><div><small>Where</small><b>${esc(EV.venue.n)}</b><span>${esc(EV.venue.a)}</span></div>`;
  $("#chips").innerHTML=EV.chips.map(c=>`<span>${T(c)}</span>`).join("");$("#allday").textContent=fill(EV.allday);
  $("#tl").innerHTML=EV.plan.map((i,n)=>`<li class="rv" style="--i:${n%4}"><div class="ic">${esc(i[3]||"🎈")}</div><div><div class="t">${esc(i[0])}</div><div class="n">${T(i[1])}</div><div class="d">${T(i[2])}</div></div></li>`).join("");
  $("#know").innerHTML=EV.know.map(k=>`<div><b>${T(k[0])}</b><span>${T(k[1])}</span></div>`).join("");
